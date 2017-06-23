@@ -72,7 +72,7 @@ enum gameState {
     //random function
     func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF) }
-    func random(min: CGFloat, max: CGFloat) -> CGFloat {
+    func random(min min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min }
     
     
@@ -96,7 +96,7 @@ enum gameState {
     
 	
     
-    override func didMove(to view: SKView) {
+    override func didMoveToView(view: SKView) {
      
         self.physicsWorld.contactDelegate = self
         
@@ -105,9 +105,9 @@ enum gameState {
 		let skView = self.view as SKView!
 		
 		/* Show debug */
-		skView?.showsPhysics = false
-		skView?.showsDrawCount = false
-		skView?.showsFPS = false
+		skView.showsPhysics = false
+		skView.showsDrawCount = false
+		skView.showsFPS = false
 		
         let background = SKSpriteNode(imageNamed: "background")
         background.size = self.size
@@ -121,7 +121,7 @@ enum gameState {
         player.zPosition = 2
         
         //adding physics
-        player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
+        player.physicsBody = SKPhysicsBody(rectangleOfSize: player.size)
         player.physicsBody!.affectedByGravity = false
         player.physicsBody!.categoryBitMask = PhysicsCategories.Player
         player.physicsBody!.collisionBitMask = PhysicsCategories.None
@@ -132,8 +132,8 @@ enum gameState {
         //scoreLabel Settings
         scoreLabel.text = "Score: 0 "
         scoreLabel.fontSize = 120
-        scoreLabel.fontColor = SKColor.white
-        scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        scoreLabel.fontColor = SKColor.whiteColor()
+        scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
         scoreLabel.position = CGPoint(x: self.size.width*0.15 , y: self.size.height + scoreLabel.frame.size.height)
         scoreLabel.zPosition = 100
         self.addChild(scoreLabel)
@@ -141,25 +141,25 @@ enum gameState {
         //livesLabel Settings
         livesLabel.text = "Lives: 5"
         livesLabel.fontSize = 90
-        livesLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
+        livesLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Right
         livesLabel.position = CGPoint(x: self.size.width*0.85, y: self.size.height + livesLabel.frame.size.height)
         livesLabel.zPosition = 100
         self.addChild(livesLabel)
 		
-		let moveOnToScreenAction = SKAction.moveTo (y: self.size.height * 0.9, duration: 0.3)
-		scoreLabel.run(moveOnToScreenAction)
-		livesLabel.run(moveOnToScreenAction)
+		let moveOnToScreenAction = SKAction.moveToY (self.size.height * 0.9, duration: 0.3)
+		scoreLabel.runAction(moveOnToScreenAction)
+		livesLabel.runAction(moveOnToScreenAction)
 		
         //bullets settings
         bulletsLabel.text = "Bullets: 50"
         bulletsLabel.fontSize = 90
-        bulletsLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
+        bulletsLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Right
         bulletsLabel.position = CGPoint(x: self.size.width*0.85 , y: self.size.height + bulletsLabel.frame.size.height)
         bulletsLabel.zPosition = 100
         self.addChild(bulletsLabel)
 		
-		let moveOnToScreenActionBullets = SKAction.moveTo (y: self.size.height * 0.85, duration: 0.4)
-		bulletsLabel.run(moveOnToScreenActionBullets)
+		let moveOnToScreenActionBullets = SKAction.moveToY (self.size.height * 0.85, duration: 0.4)
+		bulletsLabel.runAction(moveOnToScreenActionBullets)
 		
 		//pause button
 		/*let pauseButton = SKSpriteNode(imageNamed: "pause")
@@ -173,14 +173,14 @@ enum gameState {
 		
 		tapToStartLabel.text = "Tap to Begin"
 		tapToStartLabel.fontSize = 100
-		tapToStartLabel.fontColor = SKColor.white
+		tapToStartLabel.fontColor = SKColor.whiteColor()
 		tapToStartLabel.zPosition = 1
 		tapToStartLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
 		tapToStartLabel.alpha = 0
 		self.addChild(tapToStartLabel)
 		
-		let fadeInAction = SKAction.fadeIn(withDuration: 0.4)
-		tapToStartLabel.run(fadeInAction)
+		let fadeInAction = SKAction.fadeInWithDuration(0.4)
+		tapToStartLabel.runAction(fadeInAction)
 		
 		
 
@@ -192,18 +192,18 @@ enum gameState {
         let levelUpLabel = SKLabelNode(fontNamed: defaultFont)
         levelUpLabel.text = "Level Up!"
         levelUpLabel.fontSize = 200
-        levelUpLabel.fontColor = SKColor.white
+        levelUpLabel.fontColor = SKColor.whiteColor()
         levelUpLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         levelUpLabel.zPosition = 1
 		levelUpLabel.alpha = 0
         self.addChild(levelUpLabel)
 
         //adding animation
-        let fadeIn = SKAction.fadeIn(withDuration: 0.6)
-        let fadeOut = SKAction.fadeOut(withDuration: 0.6)
+        let fadeIn = SKAction.fadeInWithDuration(0.6)
+        let fadeOut = SKAction.fadeOutWithDuration(0.6)
         let delete = SKAction.removeFromParent()
         let fadeSequence = SKAction.sequence([fadeIn, fadeOut, delete])
-        levelUpLabel.run(fadeSequence)
+        levelUpLabel.runAction(fadeSequence)
 
     }
     
@@ -212,27 +212,26 @@ enum gameState {
         livesNumber += 1
         livesLabel.text = "Lives : \(livesNumber)"
         
-        let scaleUp = SKAction.scale(to:2, duration: 0.2)
-        let scaleDown = SKAction.scale(to:1, duration: 0.2)
+        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         let scaleSequence = SKAction.sequence([scaleUp, blopSound ,scaleDown])
-        livesLabel.run(scaleSequence)
+        livesLabel.runAction(scaleSequence)
         
     }
 	
 	func startGame() {
 		
 		currentGameState = gameState.inGame
-		let fadeOutAction = SKAction.fadeOut(withDuration: 0.6)
+		let fadeOutAction = SKAction.fadeOutWithDuration(0.6)
 		let deleteAction = SKAction.removeFromParent()
 		let deleteSequence = SKAction.sequence([fadeOutAction, deleteAction])
-		tapToStartLabel.run(deleteSequence)
+		tapToStartLabel.runAction(deleteSequence)
 		
-		let moveShipOntoScreenAction = SKAction.moveTo(y: self.size.height*0.2, duration: 0.5)
-		let startLevelAction  = SKAction.run(startNewLevel)
+		let moveShipOntoScreenAction = SKAction.moveToY(self.size.height*0.2, duration: 0.5)
+		let startLevelAction  = SKAction.runBlock(startNewLevel)
 		let startGameSequence = SKAction.sequence([moveShipOntoScreenAction, startLevelAction])
-		player.run(startGameSequence)
+		player.runAction(startGameSequence)
 		
-//		didBeginContact(contact: player)
 		
 	}
 	
@@ -243,22 +242,22 @@ enum gameState {
         
 		
         if livesNumber <= 3 {
-			
-            livesLabel.fontColor = SKColor.red
-            let scaleUp1 = SKAction.scale(to: 3, duration: 0.4)
-            let scaleDown1 = SKAction.scale(to: 1, duration: 0.3)
+            
+            livesLabel.fontColor = SKColor.redColor()
+            let scaleUp1 = SKAction.scaleTo(3, duration: 0.4)
+            let scaleDown1 = SKAction.scaleTo(1, duration: 0.3)
             let scaleSequence1 = SKAction.sequence([scaleUp1, scaleDown1])
-            livesLabel.run(scaleSequence1)
+            livesLabel.runAction(scaleSequence1)
             
         }
 		
 		if livesNumber >= 3 {
         
-        livesLabel.fontColor = SKColor.white
-        let scaleUp = SKAction.scale(to: 2, duration: 0.2)
-        let scaleDown = SKAction.scale(to: 1, duration: 0.2)
+        livesLabel.fontColor = SKColor.whiteColor()
+        let scaleUp = SKAction.scaleTo(2, duration: 0.2)
+        let scaleDown = SKAction.scaleTo(1, duration: 0.2)
         let scaleSequence = SKAction.sequence([ loseALifeSound, scaleUp, scaleDown])
-        livesLabel.run(scaleSequence)
+        livesLabel.runAction(scaleSequence)
             
         }
         
@@ -279,20 +278,20 @@ enum gameState {
         
         if amountOfBullets >= 11 {
             
-            bulletsLabel.fontColor = SKColor.white
-            let scaleUp = SKAction.scale(to: 1.2, duration: 0.1)
-            let scaleDown = SKAction.scale(to: 1.0, duration: 0.2)
+            bulletsLabel.fontColor = SKColor.whiteColor()
+            let scaleUp = SKAction.scaleTo(1.2, duration: 0.1)
+            let scaleDown = SKAction.scaleTo(1.0, duration: 0.2)
             let scaleSequence = SKAction.sequence([scaleUp, scaleDown])
-            bulletsLabel.run(scaleSequence)
+            bulletsLabel.runAction(scaleSequence)
         }
         
         if amountOfBullets <= 10 {
             
-            bulletsLabel.fontColor = SKColor.red
-            let scaleUp1 = SKAction.scale(to:1.5, duration: 0.2)
-            let scaleDown1 = SKAction.scale(to:1.0, duration: 0.3)
+            bulletsLabel.fontColor = SKColor.redColor()
+            let scaleUp1 = SKAction.scaleTo(1.5, duration: 0.2)
+            let scaleDown1 = SKAction.scaleTo(1.0, duration: 0.3)
             let scaleSequence1 = SKAction.sequence([scaleUp1, scaleDown1])
-            bulletsLabel.run(scaleSequence1)
+            bulletsLabel.runAction(scaleSequence1)
             
         }
         
@@ -335,10 +334,10 @@ enum gameState {
         
         
         bulletsLabel.text = "Score: \(amountOfBullets)"
-        let scaleUp = SKAction.scale(to:1.5, duration: 0.1)
-        let scaleDown = SKAction.scale(to:1.0, duration: 0.2)
+        let scaleUp = SKAction.scaleTo(1.5, duration: 0.1)
+        let scaleDown = SKAction.scaleTo(1.0, duration: 0.2)
         let scaleSequence = SKAction.sequence([scaleUp, blopSound, scaleDown])
-        bulletsLabel.run(scaleSequence)
+        bulletsLabel.runAction(scaleSequence)
 
         
     }
@@ -350,41 +349,41 @@ enum gameState {
         self.removeAllActions() //removing enemy spawn
         
         //generate list of all objects currently on screen with this name (bullet)
-        self.enumerateChildNodes(withName: "Bullet") {
+        self.enumerateChildNodesWithName("Bullet") {
             bullet, stop in
             bullet.removeAllActions()
             
         }
         
-        self.enumerateChildNodes(withName: "Enemy") {
+        self.enumerateChildNodesWithName("Enemy") {
             enemy, stop in
             enemy.removeAllActions()
         }
         
-        self.enumerateChildNodes(withName: "Carrot") {
+        self.enumerateChildNodesWithName("Carrot") {
             enemy, stop in
             enemy.removeAllActions()
         }
         
-        self.enumerateChildNodes(withName: "Regen") {
+        self.enumerateChildNodesWithName("Regen") {
             regen, stop in
             regen.removeAllActions()
         }
         
-        self.enumerateChildNodes(withName: "BulletBox" ) {
+        self.enumerateChildNodesWithName("BulletBox" ) {
             bulletBox, stop in
         bulletBox.removeAllActions()
         }
         
-        self.enumerateChildNodes(withName: "Tomato" ) {
+        self.enumerateChildNodesWithName("Tomato" ) {
             tomato, stop in
             tomato.removeAllActions()
         }
         
-      let changeSceneAction = SKAction.run(changeScene)
-        let waitToChangeScene = SKAction.wait(forDuration: 1)
+      let changeSceneAction = SKAction.runBlock(changeScene)
+        let waitToChangeScene = SKAction.waitForDuration(1)
         let changeSceneSequence = SKAction.sequence([ gameOverSound, waitToChangeScene, changeSceneAction])
-        self.run(changeSceneSequence)
+        self.runAction(changeSceneSequence)
         
         
         
@@ -396,13 +395,11 @@ enum gameState {
         //carying accross the same size
         let sceneToMoveTo = GameOverScene(size: self.size)
          sceneToMoveTo.scaleMode = self.scaleMode
-        let myTransition = SKTransition.fade(with: SKColor.black, duration: 3)
+        let myTransition = SKTransition.fadeWithColor(SKColor.blackColor(), duration: 3)
         self.view!.presentScene(sceneToMoveTo, transition: myTransition)
     }
-	
-	//MARK: didBeginContact
-	func didBegin(_ contact: SKPhysicsContact) {
- //   func didBeginContact(contact: SKPhysicsContact) {
+    
+    func didBeginContact(contact: SKPhysicsContact) {
         
         
         var body1 = SKPhysicsBody()
@@ -423,11 +420,11 @@ enum gameState {
             // if the player(1) has hit the enemy(4)
             
             if body1.node != nil {
-                spawnExplosion(spawnPosition: body1.node!.position)
+                spawnExplosion(body1.node!.position)
             }
             
             if body2.node != nil {
-                spawnExplosion(spawnPosition: body2.node!.position)
+                spawnExplosion(body2.node!.position)
             }
             
             body1.node?.removeFromParent()
@@ -444,7 +441,7 @@ enum gameState {
             addScore()
             
             if body2.node != nil {
-                spawnExplosion(spawnPosition: body2.node!.position)
+                spawnExplosion(body2.node!.position)
                 
             }
             
@@ -457,11 +454,11 @@ enum gameState {
             // if the player(1) has hit the enemy(4)
             
             if body1.node != nil {
-                spawnExplosion(spawnPosition: body1.node!.position)
+                spawnExplosion(body1.node!.position)
             }
             
             if body2.node != nil {
-                spawnExplosion(spawnPosition: body2.node!.position)
+                spawnExplosion(body2.node!.position)
             }
             
             body1.node?.removeFromParent()
@@ -477,7 +474,7 @@ enum gameState {
             addScore()
             
             if body2.node != nil {
-                spawnExplosion(spawnPosition: body2.node!.position)
+                spawnExplosion(body2.node!.position)
                 
             }
             
@@ -491,7 +488,7 @@ enum gameState {
             //if bullet(2) hits munched carrot (8)
             addScore()
             
-            spawnExplosion(spawnPosition: body2.node!.position)
+            spawnExplosion(body2.node!.position)
             
             
             
@@ -518,10 +515,10 @@ enum gameState {
         if body1.categoryBitMask == PhysicsCategories.Player && body2.categoryBitMask == PhysicsCategories.Carrot {
             // if the player(1) has hit the carrot(4)
             
-            spawnExplosion(spawnPosition: body1.node!.position)
+            spawnExplosion(body1.node!.position)
             
             
-            spawnExplosion(spawnPosition: body2.node!.position)
+            spawnExplosion(body2.node!.position)
             
             
             body1.node?.removeFromParent()
@@ -535,11 +532,11 @@ enum gameState {
             // if the player(1) has hit the carrot(4)
             
             if body1.node != nil {
-                spawnExplosion(spawnPosition: body1.node!.position)
+                spawnExplosion(body1.node!.position)
             }
             
             if body2.node != nil {
-                spawnExplosion(spawnPosition: body2.node!.position)
+                spawnExplosion(body2.node!.position)
             }
             
             body1.node?.removeFromParent()
@@ -554,7 +551,7 @@ enum gameState {
             
             
             if body2.node != nil {
-                spawnRegenExplosion(spawnPosition: body2.node!.position)
+                spawnRegenExplosion(body2.node!.position)
             }
             
             body2.node?.removeFromParent()
@@ -567,7 +564,7 @@ enum gameState {
             addBullet()
             
             if body2.node != nil {
-                spawnBoxExplosion(position: body2.node!.position)
+                spawnBoxExplosion(body2.node!.position)
             }
             
             body2.node?.removeFromParent()
@@ -610,11 +607,11 @@ enum gameState {
         self.addChild(explosion)
         
         //adding animation
-        let scaleIn = SKAction.scale(to:3, duration: 0.1)
-        let fadeOut = SKAction.fadeOut(withDuration: 0.1)
+        let scaleIn = SKAction.scaleTo(3, duration: 0.1)
+        let fadeOut = SKAction.fadeOutWithDuration(0.1)
         let delete = SKAction.removeFromParent()
         let explosionSequence = SKAction.sequence([explosionSound, scaleIn, fadeOut, delete])
-        explosion.run(explosionSequence)
+        explosion.runAction(explosionSequence)
         
     }
     
@@ -627,11 +624,11 @@ enum gameState {
         self.addChild(regenExplosion)
         
         //adding animation
-        let scaleIn = SKAction.scale(to:3, duration: 0.4)
-        let fadeOut = SKAction.fadeOut(withDuration: 0.4)
+        let scaleIn = SKAction.scaleTo(3, duration: 0.4)
+        let fadeOut = SKAction.fadeOutWithDuration(0.4)
         let delete = SKAction.removeFromParent()
         let explosionSequence = SKAction.sequence([regenExplosionSound, scaleIn, fadeOut, delete])
-        regenExplosion.run(explosionSequence)
+        regenExplosion.runAction(explosionSequence)
         
     }
     
@@ -644,12 +641,12 @@ enum gameState {
         box.zPosition = 2
         self.addChild(box)
         
-        let smallBox = SKAction.scale(to:0.05, duration: 0.5)
-        let rotateBox = SKAction.rotate(byAngle: 2, duration: 0.1)
-		let moveBox = SKAction.move(to: bulletsLabel.position + CGPoint(x: 15, y:0), duration: 1.5)
+        let smallBox = SKAction.scaleTo(0.05, duration: 0.5)
+        let rotateBox = SKAction.rotateByAngle(0.2, duration: 0.1)
+        let moveBox = SKAction.moveTo(bulletsLabel.position + CGPointMake(15, 0), duration: 1.5)
         let deleteBox = SKAction.removeFromParent()
         let boxSequence = SKAction.sequence([smallBox, rotateBox, moveBox, deleteBox])
-        box.run(boxSequence)
+        box.runAction(boxSequence)
         
         
     }
@@ -663,11 +660,11 @@ enum gameState {
         
         levelNumber += 1
         
-        if self.action(forKey: "spawningEnemies") != nil {
-            self.removeAction(forKey: "spawningEnemies")
+        if self.actionForKey("spawningEnemies") != nil {
+            self.removeActionForKey("spawningEnemies")
         }
         
-        var levelDuration = TimeInterval()
+        var levelDuration = NSTimeInterval()
         
         //levels for player
         switch levelNumber {
@@ -685,41 +682,41 @@ enum gameState {
     
         
         //spawning enemies
-        let spawn = SKAction.run(spawnEnemy)
-        let waitToSpawn = SKAction.wait(forDuration: 1.5)
+        let spawn = SKAction.runBlock(spawnEnemy)
+        let waitToSpawn = SKAction.waitForDuration(1.5)
         let spawnSequence = SKAction.sequence([waitToSpawn, spawn])
-        let spawnForever = SKAction.repeatForever(spawnSequence)
-        self.run(spawnForever, withKey: "spawningEnemies" )
+        let spawnForever = SKAction.repeatActionForever(spawnSequence)
+        self.runAction(spawnForever, withKey: "spawningEnemies" )
         
         //spawning carrot
-        let spawnC = SKAction.run(spawnCarrot)
-        let waitToSpawnC = SKAction.wait(forDuration: 18, withRange: 6)
+        let spawnC = SKAction.runBlock(spawnCarrot)
+        let waitToSpawnC = SKAction.waitForDuration(18, withRange: 6)
         let spawnSequenceC = SKAction.sequence([waitToSpawnC, spawnC])
-        let spawnForeverC = SKAction.repeatForever(spawnSequenceC)
-        self.run(spawnForeverC)
+        let spawnForeverC = SKAction.repeatActionForever(spawnSequenceC)
+        self.runAction(spawnForeverC)
         
         //spawning tomato
-        let spawnT = SKAction.run(spawnTomato)
-        let waitToSpawnT = SKAction.wait(forDuration: 30, withRange: 10)
+        let spawnT = SKAction.runBlock(spawnTomato)
+        let waitToSpawnT = SKAction.waitForDuration(30, withRange: 10)
         let spawnSequenceT = SKAction.sequence([waitToSpawnT, spawnT])
-        let spawnForeverT = SKAction.repeatForever(spawnSequenceT)
-        self.run(spawnForeverT)
+        let spawnForeverT = SKAction.repeatActionForever(spawnSequenceT)
+        self.runAction(spawnForeverT)
         
         //spawning regen
-        let spawnR = SKAction.run(spawnRegen)
-        let waitR = SKAction.wait(forDuration: 30, withRange: 10)
+        let spawnR = SKAction.runBlock(spawnRegen)
+        let waitR = SKAction.waitForDuration(30, withRange: 10)
         let spawnRSequence = SKAction.sequence([waitR, spawnR])
-        let spawnRForever = SKAction.repeatForever(spawnRSequence)
-        self.run(spawnRForever)
+        let spawnRForever = SKAction.repeatActionForever(spawnRSequence)
+        self.runAction(spawnRForever)
 		
 		
         
         //spawning bulletBox
-        let spawnB = SKAction.run(spawnBulletBox)
-        let waitB = SKAction.wait(forDuration: 20, withRange: 5)
+        let spawnB = SKAction.runBlock(spawnBulletBox)
+        let waitB = SKAction.waitForDuration(20, withRange: 5)
         let spawnBSequence = SKAction.sequence([waitB, spawnB])
-        let spawnBForever = SKAction.repeatForever(spawnBSequence)
-        self.run(spawnBForever)
+        let spawnBForever = SKAction.repeatActionForever(spawnBSequence)
+        self.runAction(spawnBForever)
     
         
     }
@@ -727,7 +724,7 @@ enum gameState {
     
     
     
-	override func update(_ currentTime: TimeInterval) {
+	override func update(currentTime: NSTimeInterval) {
 		
 		
 		
@@ -803,7 +800,7 @@ enum gameState {
     
         func fireBullet() {
         
-        currentGameState = gameState.inGame
+        currentGameState == gameState.inGame
         
         //bullet settings
         let bullet = SKSpriteNode(imageNamed: "bullet")
@@ -813,7 +810,7 @@ enum gameState {
         bullet.zPosition = 1
             
         //adding physics
-        bullet.physicsBody = SKPhysicsBody(rectangleOf: bullet.size)
+        bullet.physicsBody = SKPhysicsBody(rectangleOfSize: bullet.size)
         bullet.physicsBody!.affectedByGravity = false
         bullet.physicsBody!.categoryBitMask = PhysicsCategories.Bullet
         bullet.physicsBody!.collisionBitMask = PhysicsCategories.None
@@ -821,13 +818,13 @@ enum gameState {
             
             
         self.addChild(bullet)
-        let moveBullet = SKAction.moveTo(y: self.size.height + bullet.size.height , duration: 0.7)
+        let moveBullet = SKAction.moveToY(self.size.height + bullet.size.height , duration: 0.7)
         let deleteBullet = SKAction.removeFromParent()
-        let minusBullet = SKAction.run(loseBullet)
+        let minusBullet = SKAction.runBlock(loseBullet)
             
             
         let bulletSequence = SKAction.sequence([bulletSound, minusBullet, moveBullet, deleteBullet])
-        bullet.run(bulletSequence)
+        bullet.runAction(bulletSequence)
         
         
     }
@@ -838,21 +835,21 @@ enum gameState {
     
     func spawnEnemy() {
         
-        let randomXStart = random(min: gameArea.minX, max: gameArea.maxX)
-        let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
+        let randomXStart = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
+        let randomXEnd = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
 
         let startPoint = CGPoint(x: randomXStart, y: self.size.height * 1.2)
         let endPoint = CGPoint(x: randomXEnd, y: -self.size.height * 0.2)
         
         //enemy settings
         let enemy = SKSpriteNode(imageNamed: "enemyShip")
-		enemy.size = CGSize(width: 200,height: 200)
+        enemy.size = CGSizeMake(200, 200)
         enemy.name = "Enemy"
         enemy.position = startPoint
         enemy.zPosition = 2
         
         //adding physics
-        enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
+        enemy.physicsBody = SKPhysicsBody(rectangleOfSize: enemy.size)
         enemy.physicsBody!.affectedByGravity = false
         enemy.physicsBody!.categoryBitMask = PhysicsCategories.Enemy
         enemy.physicsBody!.collisionBitMask = PhysicsCategories.None
@@ -862,12 +859,12 @@ enum gameState {
 
 		
         //moving enemy
-        let moveEnemy = SKAction.move(to: endPoint, duration: 3)
+        let moveEnemy = SKAction.moveTo(endPoint, duration: 3)
         let deleteEnemy = SKAction.removeFromParent()
-        let loseALifeAction = SKAction.run(loseALife)
+        let loseALifeAction = SKAction.runBlock(loseALife)
         let enemySequence = SKAction.sequence([whooshSound, moveEnemy, deleteEnemy, loseALifeAction])//if it reaches end of screen: lose a life
         if currentGameState == gameState.inGame {
-        enemy.run(enemySequence)
+        enemy.runAction(enemySequence)
         }
         
         //making enemy rotate
@@ -877,12 +874,12 @@ enum gameState {
         enemy.zRotation = amountToRotate
         
         //making it pulse
-        let pulseUp = SKAction.scale(to:1.2, duration: 0.3)
-        let pulseDown = SKAction.scale(to:1, duration: 0.3)
+        let pulseUp = SKAction.scaleTo(1.2, duration: 0.3)
+        let pulseDown = SKAction.scaleTo(1, duration: 0.3)
         let pulse = SKAction.sequence([pulseUp, pulseDown])
-        let repeatPulse = SKAction.repeatForever(pulse)
+        let repeatPulse = SKAction.repeatActionForever(pulse)
         
-        enemy.run(repeatPulse)
+        enemy.runAction(repeatPulse)
         
         
 
@@ -892,8 +889,8 @@ enum gameState {
     func spawnCarrot() {
         
         
-        let randomXStart = random(min: gameArea.minX + 2, max: gameArea.maxX - 2)
-        let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
+        let randomXStart = random(min: CGRectGetMinX(gameArea) + 2, max: CGRectGetMaxX(gameArea) - 2)
+        let randomXEnd = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
         
         let startPoint = CGPoint(x: randomXStart, y: self.size.height * 1.2)
         let endPoint = CGPoint(x: randomXEnd, y: -self.size.height * 0.2)
@@ -901,25 +898,25 @@ enum gameState {
         
         //enemy settings
         let carrot = SKSpriteNode(imageNamed: "enemy2")
-		carrot.size = CGSize(width: 200, height: 200)
+        carrot.size = CGSizeMake(200, 200)
         carrot.name = "Carrot"
         carrot.position = startPoint
         carrot.zPosition = 2
         
         //adding physics
-        carrot.physicsBody = SKPhysicsBody(rectangleOf: carrot.size)
+        carrot.physicsBody = SKPhysicsBody(rectangleOfSize: carrot.size)
         carrot.physicsBody!.affectedByGravity = false
         carrot.physicsBody!.categoryBitMask = PhysicsCategories.Carrot
         carrot.physicsBody!.collisionBitMask = PhysicsCategories.None
         carrot.physicsBody!.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
         
         //moving enemy
-        let moveEnemy = SKAction.move(to: endPoint, duration: 5)
+        let moveEnemy = SKAction.moveTo(endPoint, duration: 5)
         let deleteEnemy = SKAction.removeFromParent()
-        let loseALifeAction = SKAction.run(loseALife)
+        let loseALifeAction = SKAction.runBlock(loseALife)
         let enemySequence = SKAction.sequence([ moveEnemy, deleteEnemy, loseALifeAction])//if it reaches end of screen: lose a life
         if currentGameState == gameState.inGame {
-            carrot.run(enemySequence)
+            carrot.runAction(enemySequence)
         }
         
         //making enemy rotate
@@ -935,29 +932,29 @@ enum gameState {
     
     func spawnMuchedCarrot(spawnPosition: CGPoint) {
         
-        let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
+        let randomXEnd = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
         let endPoint = CGPoint(x: randomXEnd, y: -self.size.height * 0.2)
 
         //enemy settings
         let carrot = SKSpriteNode(imageNamed: "munchedCarrot")
-		carrot.size = CGSize(width: 200,height: 200)
+        carrot.size = CGSizeMake(200, 200)
         carrot.name = "MunchedCarrot"
         carrot.zPosition = 2
         
         //adding physics
-        carrot.physicsBody = SKPhysicsBody(rectangleOf: carrot.size)
+        carrot.physicsBody = SKPhysicsBody(rectangleOfSize: carrot.size)
         carrot.physicsBody!.affectedByGravity = false
         carrot.physicsBody!.categoryBitMask = PhysicsCategories.MunchedCarrot
         carrot.physicsBody!.collisionBitMask = PhysicsCategories.None
         carrot.physicsBody!.contactTestBitMask = PhysicsCategories.Player | PhysicsCategories.Bullet
-		
+        
         //moving enemy
-        let moveEnemy = SKAction.move(to: endPoint, duration: 5)
+        let moveEnemy = SKAction.moveTo(endPoint, duration: 5)
         let deleteEnemy = SKAction.removeFromParent()
-        let loseALifeAction = SKAction.run(loseALife)
+        let loseALifeAction = SKAction.runBlock(loseALife)
         let enemySequence = SKAction.sequence([ moveEnemy, deleteEnemy, loseALifeAction])//if it reaches end of screen: lose a life
         if currentGameState == gameState.inGame {
-            carrot.run(enemySequence)
+            carrot.runAction(enemySequence)
         }
         
             self.addChild(carrot)
@@ -968,21 +965,21 @@ enum gameState {
     func spawnTomato() {
         
         
-        let randomXStart = random(min: gameArea.minX, max: gameArea.maxX)
-        let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
+        let randomXStart = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
+        let randomXEnd = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
         
         let startPoint = CGPoint(x: randomXStart, y: self.size.height * 1.2)
         let endPoint = CGPoint(x: randomXEnd, y: -self.size.height * 0.2)
         
         //enemy settings
         let tomato = SKSpriteNode(imageNamed: "tomato")
-		tomato.size = CGSize(width: 180,height: 180)
+        tomato.size = CGSizeMake(180, 180)
         tomato.name = "Tomato"
         tomato.position = startPoint
         tomato.zPosition = 2
         
         //adding physics
-        tomato.physicsBody = SKPhysicsBody(rectangleOf: tomato.size)
+        tomato.physicsBody = SKPhysicsBody(rectangleOfSize: tomato.size)
         tomato.physicsBody!.affectedByGravity = false
         tomato.physicsBody!.categoryBitMask = PhysicsCategories.Tomato
         tomato.physicsBody!.collisionBitMask = PhysicsCategories.None
@@ -990,12 +987,12 @@ enum gameState {
 		self.addChild(tomato)
 
         //moving enemy
-        let moveEnemy = SKAction.move(to: endPoint, duration: 3)
+        let moveEnemy = SKAction.moveTo(endPoint, duration: 3)
         let deleteEnemy = SKAction.removeFromParent()
-        let loseALifeAction = SKAction.run(loseALife)//run(loseALife)
+        let loseALifeAction = SKAction.runBlock(loseALife)
         let enemySequence = SKAction.sequence([whooshSound, moveEnemy, deleteEnemy, loseALifeAction])//if it reaches end of screen: lose a life
         if currentGameState == gameState.inGame {
-            tomato.run(enemySequence)
+            tomato.runAction(enemySequence)
         }
         
         //making enemy rotate
@@ -1005,12 +1002,12 @@ enum gameState {
         tomato.zRotation = amountToRotate
         
         //making it pulse
-        let pulseUp = SKAction.scale(to: 1.2, duration: 0.3)
-        let pulseDown = SKAction.scale(to: 1, duration: 0.3)
+        let pulseUp = SKAction.scaleTo(1.2, duration: 0.3)
+        let pulseDown = SKAction.scaleTo(1, duration: 0.3)
         let pulse = SKAction.sequence([pulseUp, pulseDown])
-        let repeatPulse = SKAction.repeatForever(pulse)
+        let repeatPulse = SKAction.repeatActionForever(pulse)
         
-        tomato.run(repeatPulse)
+        tomato.runAction(repeatPulse)
         
         
  
@@ -1022,20 +1019,20 @@ enum gameState {
 
     func spawnRegen() {
         
-        let randomXStart = random(min: gameArea.minX, max: gameArea.maxX)
-        let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
+        let randomXStart = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
+        let randomXEnd = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
         
         let startPoint = CGPoint(x: randomXStart, y: self.size.height * 1.2)
         let endPoint = CGPoint(x: randomXEnd, y: -self.size.height * 0.2)
         
         let regen = SKSpriteNode(imageNamed: "regen1")
-		regen.size = CGSize(width: 250, height: 250)
+        regen.size = CGSizeMake(250, 250)
         regen.name = "Regen"
         regen.position = startPoint
         regen.zPosition = 2
         
         //physics
-        regen.physicsBody = SKPhysicsBody(rectangleOf: regen.size)
+        regen.physicsBody = SKPhysicsBody(rectangleOfSize: regen.size)
         regen.physicsBody?.affectedByGravity = false
         regen.physicsBody!.categoryBitMask = PhysicsCategories.Regen
         regen.physicsBody!.collisionBitMask = PhysicsCategories.None
@@ -1043,16 +1040,16 @@ enum gameState {
 		self.addChild(regen)
 
 		
-        let moveRegen = SKAction.move(to: endPoint, duration: 6)
+        let moveRegen = SKAction.moveTo(endPoint, duration: 6)
         let deleteRegen = SKAction.removeFromParent()
         let regenSequence = SKAction.sequence([moveRegen, deleteRegen])
         if currentGameState == gameState.inGame {
-            regen.run(regenSequence) }
+            regen.runAction(regenSequence) }
         
         //making it rotate
-        let rotate = SKAction.rotate(byAngle: 0.5, duration: 0.5)
-        let rotateRegen = SKAction.repeatForever(rotate)
-        regen.run(rotateRegen)
+        let rotate = SKAction.rotateByAngle(0.5, duration: 0.5)
+        let rotateRegen = SKAction.repeatActionForever(rotate)
+        regen.runAction(rotateRegen)
         
         //making it glow
         let regen1 = SKTexture(imageNamed: "regen1")
@@ -1061,14 +1058,14 @@ enum gameState {
         let regen4 = SKTexture(imageNamed: "regen4")
         let textures = [regen1,regen2, regen3, regen4, regen3, regen2]
         
-        regen.run(SKAction.repeatForever(SKAction.animate(with: textures, timePerFrame: 0.2)))
+        regen.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures(textures, timePerFrame: 0.2)))
         
         //making it pulse
-        let pulseUp = SKAction.scale(to: 1.3, duration: 1.0)
-        let pulseDown = SKAction.scale(to: 1, duration: 1.0)
+        let pulseUp = SKAction.scaleTo(1.3, duration: 1.0)
+        let pulseDown = SKAction.scaleTo(1, duration: 1.0)
         let pulse = SKAction.sequence([pulseUp, pulseDown])
-        let repeatPulse = SKAction.repeatForever(pulse)
-        regen.run(repeatPulse)
+        let repeatPulse = SKAction.repeatActionForever(pulse)
+        regen.runAction(repeatPulse)
         
 		
     }
@@ -1076,8 +1073,8 @@ enum gameState {
     func spawnBulletBox() {
         
         
-        let randomXStart = random(min: gameArea.minX, max: gameArea.maxX)
-        let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
+        let randomXStart = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
+        let randomXEnd = random(min: CGRectGetMinX(gameArea), max: CGRectGetMaxX(gameArea))
         
         let startPoint = CGPoint(x: randomXStart, y: self.size.height * 1.2)
         let endPoint = CGPoint(x: randomXEnd, y: -self.size.height * 0.2)
@@ -1091,7 +1088,7 @@ enum gameState {
         bulletBox.zPosition = 2
         
         //physics
-        bulletBox.physicsBody = SKPhysicsBody(rectangleOf: bulletBox.size)
+        bulletBox.physicsBody = SKPhysicsBody(rectangleOfSize: bulletBox.size)
         bulletBox.physicsBody?.affectedByGravity = false
         bulletBox.physicsBody!.categoryBitMask = PhysicsCategories.BulletBox
         bulletBox.physicsBody!.collisionBitMask = PhysicsCategories.None
@@ -1099,10 +1096,10 @@ enum gameState {
 		self.addChild(bulletBox)
 
         //animation
-        let moveBox = SKAction.move(to: endPoint, duration: 2)
+        let moveBox = SKAction.moveTo(endPoint, duration: 2)
         let deleteBox = SKAction.removeFromParent()
         let boxSequence = SKAction.sequence([moveBox, deleteBox])
-        bulletBox.run(boxSequence)
+        bulletBox.runAction(boxSequence)
         
 
         
@@ -1113,7 +1110,7 @@ enum gameState {
     // ________________________________END________________________________
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
 	
 		
@@ -1128,11 +1125,11 @@ enum gameState {
             
         }
     
-        let pulseUp = SKAction.scale(to: 0.8, duration: 0.2)
-        let pulseDown = SKAction.scale(to: 0.6, duration: 0.3)
+        let pulseUp = SKAction.scaleTo(0.8, duration: 0.2)
+        let pulseDown = SKAction.scaleTo(0.6, duration: 0.3)
         let pulse = SKAction.sequence([ pulseUp, pulseDown])
-        let repeatPulse = SKAction.repeat(pulse, count: 1)
-        player.run(repeatPulse)
+        let repeatPulse = SKAction.repeatAction(pulse, count: 1)
+        player.runAction(repeatPulse)
 		
 		
 				}
@@ -1143,15 +1140,14 @@ enum gameState {
 			
 			
 			
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         //moving the ship 
         for touch: AnyObject in touches{
             
-      //      let pointOfTouch = touch.location(self) //where r we touching in screen
-			let pointOfTouch = touch.location(in: self)
-            let previousPointOfTouch = touch.previousLocation(in: self)
-			
+            let pointOfTouch = touch.locationInNode(self) //where r we touching in screen
+            let previousPointOfTouch = touch.previousLocationInNode(self)
+            
             //moving it left and right
             let amountDragged = pointOfTouch.x - previousPointOfTouch.x
             
@@ -1162,23 +1158,23 @@ enum gameState {
             let amountDraged = pointOfTouch.y - previousPointOfTouch.y
             if currentGameState == gameState.inGame {
             player.position.y += amountDraged
-				
+                
             }
             
-            if player.position.x > gameArea.maxX - player.size.width/2  {
-                player.position.x = gameArea.maxX - player.size.width/2
+            if player.position.x > CGRectGetMaxX(gameArea) - player.size.width/2  {
+                player.position.x = CGRectGetMaxX(gameArea) - player.size.width/2
             }
             
-            if player.position.x < gameArea.minX + player.size.width/2 {
-                player.position.x = gameArea.minX + player.size.width/2
+            if player.position.x < CGRectGetMinX(gameArea) + player.size.width/2 {
+                player.position.x = CGRectGetMinX(gameArea) + player.size.width/2
             }
             //up
-            if player.position.y > gameArea.maxY - player.size.height*2{
-                player.position.y = gameArea.maxY - player.size.height*2
+            if player.position.y > CGRectGetMaxY(gameArea) - player.size.height*2{
+                player.position.y = CGRectGetMaxY(gameArea) - player.size.height*2
             }
             //down
-            if player.position.y < gameArea.minY + player.size.height/2{
-                player.position.y = gameArea.minY + player.size.height/2
+            if player.position.y < CGRectGetMinY(gameArea) + player.size.height/2{
+                player.position.y = CGRectGetMinY(gameArea) + player.size.height/2
             }
         }
     }

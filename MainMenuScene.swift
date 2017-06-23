@@ -16,14 +16,14 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
 
     let floatingCandy = SKSpriteNode(imageNamed: "playerShip")
 
-    override func didMove(to view: SKView) {
+    override func didMoveToView(view: SKView) {
         
         let skView = self.view as SKView!
         
         /* Show debug */
-        skView?.showsPhysics = false
-        skView?.showsDrawCount = false
-        skView?.showsFPS = false
+        skView.showsPhysics = false
+        skView.showsDrawCount = false
+        skView.showsFPS = false
         
          let background = SKSpriteNode(imageNamed: "background")
          background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
@@ -35,7 +35,7 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
         let gameName1 = SKLabelNode(fontNamed: "WakeUpBro" )
         gameName1.text = "Canderoids"
         gameName1.fontSize = 200
-        gameName1.fontColor = SKColor.white
+        gameName1.fontColor = SKColor.whiteColor()
         gameName1.position = CGPoint(x: self.size.width*0.5, y: self.size.height*0.75)
         gameName1.zPosition = 1
         self.addChild(gameName1)
@@ -52,7 +52,7 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
         let startGame = SKLabelNode(fontNamed: "LongShot")
         startGame.text = "Start Game"
         startGame.fontSize = 140
-        startGame.fontColor = SKColor.white
+        startGame.fontColor = SKColor.whiteColor()
         startGame.position = CGPoint(x: self.size.width*0.5, y: self.size.height*0.2)
         startGame.zPosition = 1
         startGame.name = "startButton"
@@ -65,20 +65,19 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
         floatingCandy.alpha = 0
         self.addChild(floatingCandy)
         
-        let fadeIn = SKAction.fadeIn(withDuration: 0.1)
-        let goDown = SKAction.moveTo(y: self.size.height*0.66, duration: 1)
-        let goUp = SKAction.moveTo(y: self.size.height*0.50, duration: 1.2)
+        let fadeIn = SKAction.fadeInWithDuration(0.1)
+        let goDown = SKAction.moveToY(self.size.height*0.66, duration: 1)
+        let goUp = SKAction.moveToY(self.size.height*0.50, duration: 1.2)
         let float = SKAction.sequence([goDown, goUp])
-        let floating = SKAction.repeatForever(float)
+        let floating = SKAction.repeatActionForever(float)
         let animate = SKAction.sequence([fadeIn, floating])
-        floatingCandy.run(animate)
+        floatingCandy.runAction(animate)
         
    
         
         //help
         let helpButton = SKSpriteNode(imageNamed: "helpButton")
-  //      helpButton.size = CGSizeMake(150, 150)
-        helpButton.size = CGSize(width: 150,height: 150)
+        helpButton.size = CGSizeMake(150, 150)
         helpButton.position = CGPoint(x: self.size.width*0.8, y: self.size.height/7)
         helpButton.zPosition = 200
         helpButton.name = "helpButton"
@@ -86,8 +85,7 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
         
         //about (credits scene)
         let aboutButton = SKSpriteNode(imageNamed: "about")
- //       aboutButton.size = CGSizeMake(150, 150)
-        aboutButton.size = CGSize(width: 150,height: 150)
+        aboutButton.size = CGSizeMake(150, 150)
         aboutButton.position = CGPoint(x: self.size.width*0.2, y: self.size.height/7)
         aboutButton.zPosition = 2
         aboutButton.name = "About"
@@ -100,24 +98,24 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
         //carying accross the same size
         let sceneToMoveTo = MenuScene(size: self.size)
         sceneToMoveTo.scaleMode = self.scaleMode
-        let myTransition = SKTransition.doorsOpenVertical(withDuration: 0.4)
+        let myTransition = SKTransition.doorsOpenVerticalWithDuration(0.4)
         self.view!.presentScene(sceneToMoveTo, transition: myTransition)
     }
 
   
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch:AnyObject in touches {
             
-   //         let pointOfTouch = touch.location(self)
-            let pointOfTouch = touch.location(in: self)
-            let nodeItapped = atPoint(pointOfTouch)
+            let pointOfTouch = touch.locationInNode(self)
+            let nodeItapped = nodeAtPoint(pointOfTouch)
+            
             if nodeItapped.name == "Play" {
                 
                 let sceneToMoveTo = GameScene(size: self.size)
                 sceneToMoveTo.scaleMode = self.scaleMode
-                let myTransition = SKTransition.crossFade(withDuration: 0.4)
+                let myTransition = SKTransition.crossFadeWithDuration(0.4)
                 self.view!.presentScene(sceneToMoveTo, transition : myTransition)
                 
             }
@@ -126,7 +124,7 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
                 
                 let sceneToMoveTo = GameScene(size: self.size)
                 sceneToMoveTo.scaleMode = self.scaleMode
-                let myTransition = SKTransition.crossFade(withDuration: 0.4)
+                let myTransition = SKTransition.crossFadeWithDuration(0.4)
                 self.view!.presentScene(sceneToMoveTo, transition : myTransition)
                 
             }
@@ -142,7 +140,7 @@ class MainMenuScene: SKScene, SKPhysicsContactDelegate {
                 
                 let sceneToMoveTo = AboutScene(size: self.size)
                 sceneToMoveTo.scaleMode = self.scaleMode
-                let myTransition = SKTransition.doorsOpenVertical(withDuration: 0.4)
+                let myTransition = SKTransition.doorsOpenVerticalWithDuration(0.4)
                 self.view!.presentScene(sceneToMoveTo, transition : myTransition)
                 
                 

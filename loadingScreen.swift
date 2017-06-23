@@ -18,15 +18,15 @@ class loadingScreen: SKScene {
     var spawnTimer: CFTimeInterval = 0
     let fixedDelta: CFTimeInterval = 1.0/60.0 /* 60 FPS*/
     
-    override func didMove(to view: SKView) {
+    override func didMoveToView(view: SKView) {
         let skView = self.view as SKView!
 
         
         
         /* Show debug */
-        skView?.showsPhysics = false
-        skView?.showsDrawCount = false
-        skView?.showsFPS = false
+         skView.showsPhysics = false
+        skView.showsDrawCount = false
+        skView.showsFPS = false
         
         //background
         let background = SKSpriteNode(imageNamed: "loadingScreen")
@@ -40,7 +40,7 @@ class loadingScreen: SKScene {
         gameBy.text = "       Bee Productions       "
         gameBy.fontSize = 140
       //  gameBy.fontColor = UIColor(red: 123, green: 231, blue: 158, alpha: 1.0)
-        gameBy.fontColor = UIColor.white
+        gameBy.fontColor = UIColor.whiteColor()
         gameBy.position = CGPoint(x: self.size.width/2, y: self.size.height*0.3)
         gameBy.zPosition = 1
         self.addChild(gameBy)
@@ -58,13 +58,13 @@ class loadingScreen: SKScene {
         //carying accross the same size
         let sceneToMoveTo = MainMenuScene(size: self.size)
         sceneToMoveTo.scaleMode = self.scaleMode
-        let myTransition = SKTransition.fade(with: SKColor.black, duration: 3)
+        let myTransition = SKTransition.fadeWithColor(SKColor.blackColor(), duration: 3)
         self.view!.presentScene(sceneToMoveTo, transition: myTransition)
     }
     
     
     
-    override func update(_ currentTime: TimeInterval) {
+    override func update(currentTime: NSTimeInterval) {
      
     spawnTimer += fixedDelta
         
